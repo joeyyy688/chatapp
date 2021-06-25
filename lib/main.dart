@@ -28,7 +28,9 @@ class MyApp extends StatelessWidget {
             return ChatPage();
           } else {
             return Center(
-              child: CircularProgressIndicator(),
+              child: Scaffold(
+                body: CircularProgressIndicator(),
+              ),
             );
           }
         },
