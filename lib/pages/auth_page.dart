@@ -1,4 +1,4 @@
-import 'package:chatapp/widgets/authForm.dart';
+import 'package:chatapp/widgets/auth/authForm.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class _AuthPageState extends State<AuthPage> {
       });
       if (isLogin) {
         authResult = await _auth.signInWithEmailAndPassword(
-            email: email, password: password);
+            email: username, password: password);
       } else {
         authResult = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
@@ -54,7 +54,7 @@ class _AuthPageState extends State<AuthPage> {
       });
       print(error);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(error.toString().substring(37)),
+        content: Text('An error occured'),
         backgroundColor: Theme.of(context).errorColor,
       ));
     }
