@@ -1,4 +1,6 @@
+import 'package:chatapp/widgets/chat/messageBubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Messages extends StatefulWidget {
@@ -12,17 +14,29 @@ class _MessagesState extends State<Messages> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('chat').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('chat')
+          .orderBy('createdAt', descending: true)
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
+        final chatDocs = snapshot.data!.docs;
+        final currentUserID = FirebaseAuth.instance.currentUser!.uid;
         return ListView.builder(
-          itemCount: snapshot.data!.docs.length,
+          reverse: true,
+          itemCount: chatDocs.length,
           itemBuilder: (context, index) {
-            return Text(snapshot.data!.docs[index]['text']);
+            return MessageBubble(
+              messageTime: chatDocs[index]['createdAt'],
+              key: ValueKey(chatDocs[index].id),
+              message: chatDocs[index]['text'],
+              isCurrentUser:
+                  chatDocs[index]['userId'] == currentUserID ? true : false,
+            );
           },
         );
       },
