@@ -31,12 +31,12 @@ class _MessagesState extends State<Messages> {
           itemCount: chatDocs.length,
           itemBuilder: (context, index) {
             return MessageBubble(
-              messageTime: chatDocs[index]['createdAt'],
-              key: ValueKey(chatDocs[index].id),
-              message: chatDocs[index]['text'],
-              isMe: chatDocs[index]['userId'] == currentUserID ? true : false,
-              username: chatDocs[index]['username'],
-            );
+                messageTime: chatDocs[index]['createdAt'],
+                key: ValueKey(chatDocs[index].id),
+                message: chatDocs[index]['text'],
+                isMe: chatDocs[index]['userId'] == currentUserID ? true : false,
+                username: chatDocs[index]['username'],
+                userImage: chatDocs[index]['userImage']);
           },
         );
       },

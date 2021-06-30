@@ -7,13 +7,15 @@ class MessageBubble extends StatefulWidget {
   final Timestamp messageTime;
   final Key key;
   final String username;
+  final String userImage;
 
   const MessageBubble(
       {required this.message,
       required this.isMe,
       required this.key,
       required this.messageTime,
-      required this.username});
+      required this.username,
+      required this.userImage});
 
   @override
   _MessageBubbleState createState() => _MessageBubbleState();
