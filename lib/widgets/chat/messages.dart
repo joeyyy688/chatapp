@@ -34,8 +34,8 @@ class _MessagesState extends State<Messages> {
               messageTime: chatDocs[index]['createdAt'],
               key: ValueKey(chatDocs[index].id),
               message: chatDocs[index]['text'],
-              isCurrentUser:
-                  chatDocs[index]['userId'] == currentUserID ? true : false,
+              isMe: chatDocs[index]['userId'] == currentUserID ? true : false,
+              username: chatDocs[index]['username'],
             );
           },
         );

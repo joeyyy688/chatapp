@@ -44,23 +44,30 @@ class _AuthFormState extends State<AuthForm> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (!_isLogin)
-                    TextFormField(
-                      key: ValueKey('email'),
-                      validator: (value) {
-                        if (value!.isEmpty || !value.contains('@')) {
-                          return 'Please Enter a Valid E-mail';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        //labelStyle: TextStyle(fontWeight: FontWeight.bold)
-                      ),
-                      onSaved: (newValue) {
-                        userEmail = newValue!;
-                      },
+                    CircleAvatar(
+                      radius: 40,
                     ),
+                  TextButton.icon(
+                      onPressed: () {},
+                      icon: Icon(Icons.image),
+                      label: Text('Add image')),
+                  TextFormField(
+                    key: ValueKey('email'),
+                    validator: (value) {
+                      if (value!.isEmpty || !value.contains('@')) {
+                        return 'Please Enter a Valid E-mail';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      //labelStyle: TextStyle(fontWeight: FontWeight.bold)
+                    ),
+                    onSaved: (newValue) {
+                      userEmail = newValue!;
+                    },
+                  ),
                   TextFormField(
                     key: ValueKey('name'),
                     validator: (value) {
