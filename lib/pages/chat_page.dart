@@ -1,10 +1,29 @@
 import 'package:chatapp/widgets/chat/messages.dart';
 import 'package:chatapp/widgets/chat/newMessage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-class ChatPage extends StatelessWidget {
+class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
+
+  @override
+  _ChatPageState createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    firebaseCloudMessaging();
+  }
+
+  Future<void> firebaseCloudMessaging() async {
+    FirebaseAuth.instance.currentUser!
+        .getIdToken()
+        .then((value) => print(value));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +32,7 @@ class ChatPage extends StatelessWidget {
         title: Text('JKD Messanger'),
         actions: [
           DropdownButton(
+            underline: Container(),
             icon: Icon(
               Icons.more_vert_outlined,
               color: Theme.of(context).primaryIconTheme.color,
