@@ -4,14 +4,20 @@ import 'package:chatapp/widgets/pickers/imagePicker.dart';
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
-  AuthForm(this.submitFn, this.isLoading);
+  AuthForm(this.submitFnSignUp, this.isLoading, this.submitFnLogin);
   final void Function(
     String email,
     String password,
     String userName,
     File userImageFile,
     bool isLogin,
-  ) submitFn;
+  ) submitFnSignUp;
+  final void Function(
+    String email,
+    String password,
+    String userName,
+    bool isLogin,
+  ) submitFnLogin;
   final isLoading;
 
   @override
@@ -43,8 +49,16 @@ class _AuthFormState extends State<AuthForm> {
       _formKey.currentState!.save();
     }
 
-    widget.submitFn(userEmail.trim(), userPassword.trim(), userName.trim(),
-        userImageFile!, _isLogin);
+    if (!_isLogin) {
+      widget.submitFnSignUp(userEmail.trim(), userPassword.trim(),
+          userName.trim(), userImageFile!, _isLogin);
+    } else {
+      widget.submitFnLogin(
+          userEmail.trim(), userPassword.trim(), userName.trim(), _isLogin);
+    }
+
+    // widget.submitFn(userEmail.trim(), userPassword.trim(), userName.trim(),
+    //     userImageFile!, _isLogin);
   }
 
   @override
@@ -66,23 +80,24 @@ class _AuthFormState extends State<AuthForm> {
                         userImageFile = pickedImage;
                       },
                     ),
-                  TextFormField(
-                    key: ValueKey('email'),
-                    validator: (value) {
-                      if (value!.isEmpty || !value.contains('@')) {
-                        return 'Please Enter a Valid E-mail';
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      //labelStyle: TextStyle(fontWeight: FontWeight.bold)
+                  if (!_isLogin)
+                    TextFormField(
+                      key: ValueKey('email'),
+                      validator: (value) {
+                        if (value!.isEmpty || !value.contains('@')) {
+                          return 'Please Enter a Valid E-mail';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        //labelStyle: TextStyle(fontWeight: FontWeight.bold)
+                      ),
+                      onSaved: (newValue) {
+                        userEmail = newValue!;
+                      },
                     ),
-                    onSaved: (newValue) {
-                      userEmail = newValue!;
-                    },
-                  ),
                   TextFormField(
                     key: ValueKey('name'),
                     validator: (value) {
@@ -91,9 +106,10 @@ class _AuthFormState extends State<AuthForm> {
                       }
                       return null;
                     },
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      labelText: 'UserName',
+                      labelText: 'Email',
+                      //labelText: 'Username',
                       //labelStyle: TextStyle(fontWeight: FontWeight.bold)
                     ),
                     onSaved: (newValue) {

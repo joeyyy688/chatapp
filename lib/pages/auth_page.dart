@@ -18,8 +18,8 @@ class _AuthPageState extends State<AuthPage> {
   final _auth = FirebaseAuth.instance;
   var isLoading = false;
 
-  Future<void> _submitAuthForm(String email, String password, String username,
-      File userImageFile, bool isLogin) async {
+  Future<void> _submitAuthFormSignUp(String email, String password,
+      String username, File userImageFile, bool isLogin) async {
     UserCredential authResult;
     try {
       setState(() {
@@ -64,13 +64,50 @@ class _AuthPageState extends State<AuthPage> {
         content: Text(errorMessage),
         backgroundColor: Theme.of(context).errorColor,
       ));
-    } catch (error) {
+    } on FirebaseAuthException catch (error) {
       setState(() {
         isLoading = false;
       });
       print(error);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('An error occured'),
+        content: Text(error.message.toString()),
+        backgroundColor: Theme.of(context).errorColor,
+      ));
+    }
+  }
+
+  Future<void> _submitAuthFormLogin(
+      String email, String password, String username, bool isLogin) async {
+    UserCredential authResult;
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      if (isLogin) {
+        authResult = await _auth.signInWithEmailAndPassword(
+            email: username, password: password);
+      }
+    } on PlatformException catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      var errorMessage = "An Error Occured, please check your credentials";
+
+      if (e.message != null) {
+        errorMessage = e.message!;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(errorMessage),
+        backgroundColor: Theme.of(context).errorColor,
+      ));
+    } on FirebaseAuthException catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+      print(error);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(error.message.toString()),
         backgroundColor: Theme.of(context).errorColor,
       ));
     }
@@ -80,6 +117,6 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        body: AuthForm(_submitAuthForm, isLoading));
+        body: AuthForm(_submitAuthFormSignUp, isLoading, _submitAuthFormLogin));
   }
 }
